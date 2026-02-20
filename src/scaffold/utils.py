@@ -43,10 +43,9 @@ def get_postgresql_url(for_sqlalchemy: bool = False) -> str:
     # Parse the URL
     parsed = urlparse(base_url)
 
-    # Assert that the scheme is postgresql
-    assert parsed.scheme == "postgresql", (
-        "DATABASE_URL must use the postgresql:// scheme"
-    )
+    if parsed.scheme != "postgresql":
+        msg = "DATABASE_URL must use the postgresql:// scheme"
+        raise ValueError(msg)
 
     if for_sqlalchemy:
         # Append the driver name for SQLAlchemy

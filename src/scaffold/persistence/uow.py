@@ -14,14 +14,14 @@ class BaseSqlUnitOfWork:
         self.session = session
         self.repositories: list[SyncableRepository] = []
 
-    async def __aenter__(self) -> None:
-        return
+    async def __aenter__(self) -> "BaseSqlUnitOfWork":
+        return self
 
     async def __aexit__(
         self,
-        exc_type: type,
-        exc: BaseException,
-        tb: TracebackType,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
     ) -> None:
         await self.rollback()
         await self.session.close()
